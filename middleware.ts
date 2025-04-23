@@ -4,6 +4,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next()
 
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -30,18 +31,19 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const { data: { session }} = await supabase.auth.getSession()
-  const { data: { user } } = await supabase.auth.getUser()
+  const { data: { session } } = await supabase.auth.getSession();
+  const user = session?.user;  
 
   const { pathname } = request.nextUrl
   const isAuthPage = ['/login', '/signup'].some(p => pathname.startsWith(p))
   const isProtectedPage = pathname.startsWith('/dashboard')
-
-  if ((!session || !user) && isProtectedPage) {
+  
+  if (!session && isProtectedPage) {
     const redirectUrl = new URL('/login', request.url)
     redirectUrl.searchParams.set('redirectedFrom', pathname)
     return NextResponse.redirect(redirectUrl)
   }
+  
 
   if (session && user && isAuthPage) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
@@ -52,8 +54,8 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/dashboard/:path*', 
+    '/(dashboard)(.*)',
     '/login',
     '/signup'
   ],
-}
+};

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/src/lib/supabase';
 import { Button } from '@/src/components/ui/button';
@@ -100,6 +100,15 @@ export default function NewNotePage() {
     }
   };
 
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data, error }) => {
+      if (error || !data.user) {
+        router.replace('/login');
+      }
+    });
+  }, [router]);
+
+
   return (
     <Card className="max-w-3xl mx-auto">
       <Toaster />
@@ -151,3 +160,5 @@ export default function NewNotePage() {
     </Card>
   );
 }
+
+

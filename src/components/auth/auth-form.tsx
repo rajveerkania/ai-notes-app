@@ -263,7 +263,7 @@ export default function AuthForm() {
         >
           {authMode === 'signin'
             ? "Don't have an account? Sign up"
-            : "Already have an "}
+            : "Already have an account! Sign in"}
         </Button>
 
       </CardFooter>
