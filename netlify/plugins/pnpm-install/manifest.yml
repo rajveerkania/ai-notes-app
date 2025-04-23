@@ -1,0 +1,4 @@
+name: netlify-plugin-pnpm-install
+inputs: []
+version: 1.0.0
+description: Installs dependencies using pnpm
