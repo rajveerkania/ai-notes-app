@@ -1,0 +1,12 @@
+[build]
+  command = "pnpm build"
+  publish = "out"
+
+[build.environment]
+  NPM_FLAGS = "--version" 
+
+[build.processing]
+  skip_processing = true
+
+[[plugins]]
+  package = "./netlify/plugins/pnpm-install"
